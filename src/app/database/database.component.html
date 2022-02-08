@@ -1,0 +1,173 @@
+<div class="container">
+  <table style="text-align: center" class="table table-success table-stripped">
+    <thead>
+      <tr>
+        <button
+          class="btn btn-success d-flex flex-row bd-highlight mb-3"
+          (click)="goToPage('form')"
+        >
+          Add new record
+        </button>
+      </tr>
+      <tr class="headRow">
+        <th scope="col">User Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Country</th>
+        <th scope="col">Gender</th>
+        <th scope="col">Language</th>
+        <th scope="col" style="text-align: center">Update</th>
+      </tr>
+    </thead>
+    <tbody
+      class="body"
+      *ngFor="let details of detailsToBeStored; let i = index"
+    >
+      <tr *ngIf="i > 0">
+        <td>
+          <label [hidden]="!details.isCheck">{{ details.userId }}</label>
+          <div [formGroup]="formArray[i]">
+            <input
+              type="text"
+              formControlName="userIdFormControl"
+              onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';"
+              [hidden]="details.isCheck"
+            />
+          </div>
+        </td>
+        <td>
+          <label [hidden]="!details.isCheck">{{ details.name }}</label>
+          <div [formGroup]="formArray[i]">
+            <input
+              type="text"
+              formControlName="nameFormControl"
+              onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';"
+              [hidden]="details.isCheck"
+            />
+          </div>
+        </td>
+        <td>
+          <label [hidden]="!details.isCheck">{{ details.email }}</label>
+          <div [formGroup]="formArray[i]">
+            <input
+              type="text"
+              formControlName="emailFormControl"
+              onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';"
+              [hidden]="details.isCheck"
+            />
+          </div>
+        </td>
+        <td>
+          <label [hidden]="!details.isCheck">{{ details.country }}</label>
+          <div [formGroup]="formArray[i]" [hidden]="details.isCheck">
+            <mat-form-field appearance="fill">
+              <mat-select formControlName="countryFormControl" required>
+                <mat-option
+                  *ngFor="let country of countries"
+                  [value]="country.value"
+                >
+                  {{ country.viewValue }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </td>
+        <td>
+          <label [hidden]="!details.isCheck">{{ details.gender }}</label>
+          <div [formGroup]="formArray[i]" [hidden]="details.isCheck">
+            <!-- <input
+              type="text"
+              formControlName="genderFormControl"
+              onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';"
+              [hidden]="details.isCheck"
+            /> -->
+            <mat-radio-group
+              formControlName="genderFormControl"
+              aria-labelledby="example-radio-group-label"
+            >
+              <mat-radio-button value="male">Male</mat-radio-button>
+              <mat-radio-button value="female">Female</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </td>
+        <td>
+          <!-- *ngFor="let language of languageArray; let i = index" -->
+          <label [hidden]="!details.isCheck">{{ details.language }}</label>
+          <!-- <input
+            type="checkbox"
+            [value]="details.language"
+            [hidden]="details.isCheck"
+          /> -->
+          <!-- details.language.indexOf(language.value) > -1 -->
+          <div [formGroup]="formArray[i]" [hidden]="details.isCheck">
+            <div *ngFor="let language of languages; let k = index">
+              <div *ngIf="k == details.id">
+                <div *ngFor="let lan of language; let l = index">
+                  {{ checkIndex(details.language, lan.value, l, k) }}
+                  <!-- <div *ngIf="checkIndex(details.language, language.value, k)"> -->
+                  <label>
+                    <input
+                      type="checkbox"
+                      [value]="lan.value"
+                      [checked]="lan.isSelected"
+                      (change)="onCheckboxChange($event, details.id, l, k)"
+                    />{{ lan.name }}
+                  </label>
+                  <!-- </div> -->
+                </div>
+              </div>
+            </div>
+
+            <!-- <div [formGroup]="formArray[i]" [hidden]="details.isCheck">
+              (change)="onCheckboxChange($event, details.id)"
+            <div
+              *ngFor="let language of languages; let j = index"
+              [hidden]="details.isCheck"
+            >
+              
+              </div>
+              <mat-checkbox
+                type="checkbox"
+                formControlName="languageFormControl"
+                [value]="language.value"
+                [checked]="language.isSelected"
+              >
+                {{ language.value }}</mat-checkbox
+              >
+            </div> -->
+          </div>
+        </td>
+        <td>
+          <button
+            class="btn btn-warning"
+            [hidden]="!details.isCheck"
+            (click)="editValues(details.id)"
+          >
+            Edit
+          </button>
+          <button
+            class="btn btn-success"
+            [hidden]="details.isCheck"
+            (click)="saveValues(details.id)"
+          >
+            Save
+          </button>
+          <button
+            class="btn btn-danger"
+            [hidden]="!details.isCheck"
+            (click)="deleteValues(details.id)"
+          >
+            Delete
+          </button>
+          <button
+            class="btn btn-danger"
+            [hidden]="details.isCheck"
+            (click)="cancelValues(details.id)"
+          >
+            Cancel
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

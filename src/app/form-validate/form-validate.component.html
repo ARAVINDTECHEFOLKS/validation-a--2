@@ -1,0 +1,274 @@
+<div class="container pt-5">
+  <div class="row justify-content-sm-center pt-5">
+    <div class="col-sm-6 shadow round pd-3">
+      <h1 class="text-center pt-3 text-secondary">Registration</h1>
+      <form
+        class="example-form"
+        [formGroup]="profileForm"
+        #ngForm="ngForm"
+        class="form-container"
+      >
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>User Id</mat-label>
+          <input
+            matInput
+            formControlName="userIdFormControl"
+            placeholder="abcd123"
+            value=""
+          />
+          <mat-error
+            *ngIf="
+              profileForm.get('userIdFormControl')?.hasError('minlength') &&
+              !profileForm.get('userIdFormControl')?.hasError('required') &&
+              !profileForm.get('userIdFormControl')?.hasError('maxlength')
+            "
+          >
+            minimum lenght should be 8 characters
+          </mat-error>
+          <mat-error
+            *ngIf="
+              profileForm.get('userIdFormControl')?.hasError('maxlength') &&
+              !profileForm.get('userIdFormControl')?.hasError('required') &&
+              !profileForm.get('userIdFormControl')?.hasError('minlength')
+            "
+          >
+            maximum lenght should be 15 characters
+          </mat-error>
+          <mat-error
+            *ngIf="profileForm.get('userIdFormControl')?.hasError('required')"
+          >
+            UserId is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Password</mat-label>
+          <input
+            type="password"
+            matInput
+            formControlName="passwordFormControl"
+            placeholder=""
+            value=""
+          />
+          <mat-error
+            *ngIf="
+              profileForm.get('passwordFormControl')?.hasError('minlength') &&
+              !profileForm.get('passwordFormControl')?.hasError('required') &&
+              !profileForm.get('passwordFormControl')?.hasError('maxlength')
+            "
+          >
+            minimum lenght should be 8 characters
+          </mat-error>
+          <mat-error
+            *ngIf="
+              profileForm.get('passwordFormControl')?.hasError('maxlength') &&
+              !profileForm.get('passwordFormControl')?.hasError('required') &&
+              !profileForm.get('passwordFormControl')?.hasError('minlength')
+            "
+          >
+            maximum lenght should be 15 characters
+          </mat-error>
+          <mat-error
+            *ngIf="profileForm.get('passwordFormControl')?.hasError('required')"
+          >
+            password is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Name</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="nameFormControl"
+            placeholder="abcd"
+            value=""
+          />
+          <mat-error
+            *ngIf="
+              profileForm.get('nameFormControl')?.hasError('pattern') &&
+              !profileForm.get('nameFormControl')?.hasError('required')
+            "
+          >
+            Please enter a valid name(alphabates only)
+          </mat-error>
+          <mat-error
+            *ngIf="profileForm.get('nameFormControl')?.hasError('required')"
+          >
+            Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Email</mat-label>
+          <input
+            type="email"
+            matInput
+            formControlName="emailFormControl"
+            placeholder="Ex. pat@example.com"
+          />
+          <mat-error
+            *ngIf="
+              profileForm.get('emailFormControl')?.hasError('email') &&
+              !profileForm.get('emailFormControl')?.hasError('required')
+            "
+          >
+            Please enter a valid email address
+          </mat-error>
+          <mat-error
+            *ngIf="profileForm.get('emailFormControl')?.hasError('required')"
+          >
+            Email is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Address</mat-label>
+          <textarea matInput placeholder="h.no:xxx,vlg:xxxx"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Country</mat-label>
+          <mat-select formControlName="countryControl" required>
+            <mat-option
+              *ngFor="let country of countries"
+              [value]="country.value"
+            >
+              {{ country.viewValue }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="profileForm.get('countryControl')?.hasError('required')"
+            >please choose a country</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>ZIP code</mat-label>
+          <input
+            matInput
+            formControlName="zipCodeFormControl"
+            placeholder="505455"
+            value=""
+          />
+          <mat-error
+            *ngIf="
+              profileForm.get('zipCodeFormControl')?.hasError('pattern') &&
+              !profileForm.get('zipCodeFormControl')?.hasError('required') &&
+              !profileForm.get('zipCodeFormControl')?.hasError('minlength') &&
+              !profileForm.get('zipCodeFormControl')?.hasError('maxlength')
+            "
+          >
+            Please enter a valid code(numaric only)
+          </mat-error>
+          <mat-error
+            *ngIf="
+              (profileForm.get('zipCodeFormControl')?.hasError('minlength') ||
+                profileForm.get('zipCodeFormControl')?.hasError('maxlength')) &&
+              !profileForm.get('zipCodeFormControl')?.hasError('required')
+            "
+          >
+            lenght should be 6 characters
+          </mat-error>
+          <mat-error
+            *ngIf="profileForm.get('zipCodeFormControl')?.hasError('required')"
+          >
+            zipcode is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <div class="row">
+          <mat-radio-group
+            [ngClass]="{
+              invalid:
+                ngForm.submitted &&
+                profileForm.get('gender')?.hasError('required')
+            }"
+            formControlName="gender"
+            aria-labelledby="example-radio-group-label"
+          >
+            <h4>Gender*</h4>
+            <mat-radio-button value="male">Male</mat-radio-button>
+            <mat-radio-button value="female">Female</mat-radio-button>
+          </mat-radio-group>
+          <mat-error
+            *ngIf="
+              ngForm.submitted &&
+              profileForm.get('gender')?.hasError('required')
+            "
+          >
+            Gender is <strong>required</strong>
+          </mat-error>
+        </div>
+
+        <!-- <div class="row">
+          <div class="col-md-12">
+            <mat-radio-group
+              [ngClass]="{
+                invalid:
+                  ngForm.submitted &&
+                  profileForm.get('gender')?.hasError('required')
+              }"
+              formControlName="gender"
+              class="margin-left"
+            >
+              <mat-radio-button value="male"> Male </mat-radio-button>
+              <mat-radio-button value="female"> Female </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div> -->
+        <div class="row" style="padding-top: 10px">
+          <section
+            class="example-section"
+            [ngClass]="{
+              invalid:
+                ngForm.submitted &&
+                profileForm.get('languageFormControl')?.hasError('required')
+            }"
+          >
+            <h4>Select your languages:*</h4>
+            <!-- <mat-checkbox
+              formControlName="language"
+              style="padding-right: 3px"
+              *ngFor="let language of languages"
+              [value]="language.value"
+              (change)="onChange()"
+              [(ngModel)]="language.isSelected"
+            >
+              {{ language.viewValue }}</mat-checkbox
+            > -->
+            <div *ngFor="let language of languages; let i = index">
+              <label>
+                <input
+                  type="checkbox"
+                  [value]="language.value"
+                  (change)="onCheckboxChange($event)"
+                />{{ language.name }}
+              </label>
+            </div>
+
+            <mat-error
+              *ngIf="
+                ngForm.submitted &&
+                profileForm.get('languageFormControl')?.hasError('required')
+              "
+            >
+              Language is <strong>required</strong>
+            </mat-error>
+          </section>
+        </div>
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Leave a comment</mat-label>
+          <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+        </mat-form-field>
+        <mat-card-actions>
+          <button (click)="saveForm()" mat-raised-button color="primary">
+            Submit
+          </button>
+        </mat-card-actions>
+      </form>
+      <!-- <button (click)="goToPage('database')" mat-raised-button color="primary">
+        View Data
+      </button> -->
+    </div>
+  </div>
+</div>
