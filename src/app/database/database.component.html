@@ -139,28 +139,29 @@
         </td>
         <td>
           <button
-            class="btn btn-warning"
+            style="margin-right: 5px"
+            class="btn btn-warning bn"
             [hidden]="!details.isCheck"
             (click)="editValues(details.id)"
           >
             Edit
           </button>
           <button
-            class="btn btn-success"
+            class="btn btn-success bn"
             [hidden]="details.isCheck"
             (click)="saveValues(details.id)"
           >
             Save
           </button>
           <button
-            class="btn btn-danger"
+            class="btn btn-danger bn"
             [hidden]="!details.isCheck"
             (click)="deleteValues(details.id)"
           >
             Delete
           </button>
           <button
-            class="btn btn-danger"
+            class="btn btn-danger bn"
             [hidden]="details.isCheck"
             (click)="cancelValues(details.id)"
           >

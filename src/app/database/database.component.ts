@@ -3,12 +3,12 @@ import { DataTransfer } from '../services/dataTransfer.service';
 import { Router } from '@angular/router';
 import {
   FormControl,
-  FormGroup,
   Validators,
   FormBuilder,
-  RequiredValidator,
   FormArray,
 } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
 @Component({
   selector: 'app-database',
   templateUrl: './database.component.html',
@@ -23,117 +23,37 @@ export class DatabaseComponent implements OnInit {
     { value: 'Australia', viewValue: 'Australia' },
   ];
   languages: Array<any> = [
-    [
-      { value: 'English', name: 'Englsih', isSelected: false },
-      { value: 'Hindi', name: 'Hindi', isSelected: false },
-      { value: 'Telugu', name: 'Telugu', isSelected: false },
-    ],
+    JSON.parse(JSON.stringify(this.dataTransfer.languagesArray)),
   ];
-  // detailsToBeStored: Array<any> = [];
-  detailsToBeStored: [
-    {
-      userId: string;
-      name: string;
-      email: string;
-      country: string;
-      gender: string;
-      languageString: string;
-      language: Array<string>;
-      id: number;
-      isCheck: boolean;
-    }
-  ] = [
-    {
-      userId: '',
-      name: '',
-      email: '',
-      country: '',
-      gender: '',
-      languageString: '',
-      language: [],
-      id: 0,
-      isCheck: false,
-    },
-  ];
+  detailsToBeStored: Array<any> = [undefined];
   //ShowSave: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private dataTransfer: DataTransfer,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ) {}
-  formArray: Array<any> = [
-    this.formBuilder.group({
-      userIdFormControl: new FormControl({ value: '', disabled: true }, [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.maxLength(15),
-      ]),
-      nameFormControl: new FormControl({ value: '', disabled: true }, [
-        Validators.required,
-        Validators.pattern('[a-zA-Z]+'),
-      ]),
-      emailFormControl: new FormControl({ value: '', disabled: true }, [
-        Validators.required,
-        Validators.email,
-      ]),
-      countryFormControl: new FormControl(
-        { value: '', disabled: true },
-        Validators.required
-      ),
-      genderFormControl: [{ value: '', disabled: true }, [Validators.required]],
-      // this.formBuilder.array([], Validators.required),
-      languageFormControl: this.formBuilder.array([], Validators.required),
-      // languageFormControl: this.formBuilder.array[
-      //   { value: [], disabled: true },
-      //   [Validators.required],
-      // ],
-    }),
-  ];
+  formArray: Array<any> = [undefined];
 
   ngOnInit(): void {
-    this.formArray[0].disable();
-    // this.detailsToBeStored = this.dataTransfer.details;
     for (let i = 1; i < this.dataTransfer.details.length; i++) {
-      this.languages.push([
-        { value: 'English', name: 'Englsih', isSelected: false },
-        { value: 'Hindi', name: 'Hindi', isSelected: false },
-        { value: 'Telugu', name: 'Telugu', isSelected: false },
-      ]);
-      console.log(this.languages.length);
+      this.languages.push(
+        JSON.parse(JSON.stringify(this.dataTransfer.languagesArray))
+      );
       this.detailsToBeStored[i] = this.dataTransfer.details[i];
       this.detailsToBeStored[i].id = i;
-      // this.selectedLanguageArray = [];
-      // this.selectedLanguageArray = this.dataTransfer.details[i].language;
       this.formArray.push(
         this.formBuilder.group({
-          userIdFormControl: new FormControl(
-            { value: this.detailsToBeStored[i].userId, disabled: true },
-            [
-              Validators.required,
-              Validators.minLength(8),
-              Validators.maxLength(15),
-            ]
-          ),
-          nameFormControl: new FormControl(
-            { value: this.detailsToBeStored[i].name, disabled: true },
-            [Validators.required, Validators.pattern('[a-zA-Z]+')]
-          ),
-          emailFormControl: new FormControl(
-            { value: this.detailsToBeStored[i].email, disabled: true },
-            [Validators.required, Validators.email]
-          ),
+          userIdFormControl: new FormControl(this.detailsToBeStored[i].userId),
+          nameFormControl: new FormControl(this.detailsToBeStored[i].name),
+          emailFormControl: new FormControl(this.detailsToBeStored[i].email),
           countryFormControl: new FormControl(
-            { value: this.detailsToBeStored[i].country, disabled: true },
-            Validators.required
+            this.detailsToBeStored[i].country
           ),
-          genderFormControl: [
-            { value: this.detailsToBeStored[i].gender, disabled: true },
-            [Validators.required],
-          ],
+          genderFormControl: [this.detailsToBeStored[i].gender],
           languageFormControl: this.formBuilder.array(
-            this.detailsToBeStored[i].language,
-            [Validators.required]
+            this.detailsToBeStored[i].language
           ),
         })
       );
@@ -183,45 +103,22 @@ export class DatabaseComponent implements OnInit {
       i,
       1,
       this.formBuilder.group({
-        userIdFormControl: new FormControl(
-          { value: this.detailsToBeStored[i].userId, disabled: true },
-          [
-            Validators.required,
-            Validators.minLength(8),
-            Validators.maxLength(15),
-          ]
-        ),
-        nameFormControl: new FormControl(
-          { value: this.detailsToBeStored[i].name, disabled: true },
-          [Validators.required, Validators.pattern('[a-zA-Z]+')]
-        ),
-        emailFormControl: new FormControl(
-          { value: this.detailsToBeStored[i].email, disabled: true },
-          [Validators.required, Validators.email]
-        ),
-        countryFormControl: new FormControl(
-          {
-            value: this.detailsToBeStored[i].country,
-            disabled: true,
-          },
-          Validators.required
-        ),
-        genderFormControl: [
-          { value: this.detailsToBeStored[i].gender, disabled: true },
-          [Validators.required],
-        ],
+        userIdFormControl: new FormControl(this.detailsToBeStored[i].userId),
+        nameFormControl: new FormControl(this.detailsToBeStored[i].name),
+        emailFormControl: new FormControl(this.detailsToBeStored[i].email),
+        countryFormControl: new FormControl(this.detailsToBeStored[i].country),
+        genderFormControl: [this.detailsToBeStored[i].gender],
         languageFormControl: this.formBuilder.array(
-          this.detailsToBeStored[i].language,
-          [Validators.required]
+          this.detailsToBeStored[i].language
         ),
       })
     );
-    this.languages.splice(i, 1, [
-      { value: 'English', name: 'Englsih', isSelected: false },
-      { value: 'Hindi', name: 'Hindi', isSelected: false },
-      { value: 'Telugu', name: 'Telugu', isSelected: false },
-    ]);
-    this.dataTransfer.details[i].language.forEach((element) => {
+    this.languages.splice(
+      i,
+      1,
+      JSON.parse(JSON.stringify(this.dataTransfer.languagesArray))
+    );
+    this.dataTransfer.details[i].language.forEach((element: any) => {
       console.log(element);
     });
     for (let value of this.languages[i]) {
@@ -232,6 +129,32 @@ export class DatabaseComponent implements OnInit {
     }
     // console.log(checkForm.value.languageFormControl);
     console.log(this.formArray[i].value.languageFormControl);
+  }
+  compareArray(arr1: Array<string>, arr2: Array<string>) {
+    let checkValue = true;
+    arr1.forEach((e: string) => {
+      if (arr2.indexOf(e) > -1) {
+      } else {
+        checkValue = false;
+      }
+    });
+    return checkValue;
+  }
+  dialogBoxResult(id: number) {
+    let dialogBox = this.dialog.open(DialogComponent);
+    let checkSubmisson;
+    dialogBox.afterClosed().subscribe((result) => {
+      console.log(result);
+      checkSubmisson = result;
+      if (checkSubmisson) {
+        console.log(checkSubmisson);
+        this.saveValues(id);
+      } else {
+        console.log(checkSubmisson);
+        this.checkCancelBUtton(id);
+      }
+    });
+    console.log(checkSubmisson);
   }
   cancelValues(id: number) {
     this.selectedLanguageArray = [];
@@ -258,105 +181,29 @@ export class DatabaseComponent implements OnInit {
             this.detailsToBeStored[i].country ||
           checkForm.value.genderFormControl != this.detailsToBeStored[i].gender
         ) {
-          if (confirm('do you want save the changes') == true) {
-            this.saveValues(id);
-          }
+          this.dialogBoxResult(i);
         } else {
           let arr1 = checkForm.value.languageFormControl;
           let arr2 = this.detailsToBeStored[i].language;
-          let checkExist;
-          for (let lang of arr1) {
-            console.log(lang);
+          let checkExist1;
+          let checkExist2;
+          checkExist1 = this.compareArray(arr2, arr1);
+          checkExist2 = this.compareArray(arr1, arr2);
+          if (checkExist1 == false || checkExist2 == false) {
+            this.dialogBoxResult(i);
           }
-          for (let lang2 of arr2) {
-            console.log(lang2);
-          }
-          arr2.forEach((e: string) => {
-            if (arr1.indexOf(e) > -1) {
-            } else {
-              checkExist = false;
-            }
-          });
-          arr1.forEach((e: string) => {
-            if (arr2.indexOf(e) > -1) {
-            } else {
-              checkExist = false;
-            }
-          });
-          if (checkExist == false) {
-            if (
-              confirm('do you want save the changes along with langugage') ==
-              true
-            ) {
-              this.saveValues(id);
-            } else {
-              this.checkCancelBUtton(i);
-            }
-          }
-          if (checkExist == undefined) {
+          if (checkExist1 == true && checkExist2 == true) {
             this.checkCancelBUtton(i);
           }
         }
-        //  else {
-        //     this.checkCancelBUtton(i);
-        //   }
-        // } else {
-        //   console.log('this is else block');
-        //   console.log(checkForm.value.languageFormControl);
-        //   console.log(this.detailsToBeStored[i].language);
-        //   this.checkCancelBUtton(i);
-        //   // if (
-        //   //   checkForm.value.languageFormControl !==
-        //   //   this.detailsToBeStored[i].language
-        //   // ) {
-        //   console.log('this is for language check');
-        //   let arr1 = checkForm.value.languageFormControl;
-        //   let arr2 = this.detailsToBeStored[i].language;
-        //   let checkExist;
-        //   for (let lang of arr1) {
-        //     console.log(lang);
-        //   }
-        //   for (let lang2 of arr2) {
-        //     console.log(lang2);
-        //   }
-        //   arr2.forEach((e: string) => {
-        //     if (arr1.indexOf(e) > -1) {
-        //     } else {
-        //       checkExist = false;
-        //     }
-        //   });
-        //   arr1.forEach((e: string) => {
-        //     if (arr2.indexOf(e) > -1) {
-        //     } else {
-        //       checkExist = false;
-        //     }
-        //   });
-        //   if (checkExist == false) {
-        //     if (
-        //       confirm('do you want save the changes along with langugage') ==
-        //       true
-        //     ) {
-        //       this.saveValues(id);
-        //     } else {
-        //       this.checkCancelBUtton(i);
-        //     }
-        //   }
-        //   // } else {
-        //   // this.checkCancelBUtton(i);
-        //   // }
-        // }
-
         break;
       }
     }
-    console.log('cancel');
   }
   saveValues(id: number) {
     console.log('save');
     for (let i = 1; i < this.detailsToBeStored.length; i++) {
       if (id == i) {
-        console.log('saved', i);
-        // console.log(this.dataTransfer.details[i].language);
         this.dataTransfer.details[i].isCheck = true;
         this.formArray[i].disable();
         this.dataTransfer.details[i].userId =
@@ -369,13 +216,8 @@ export class DatabaseComponent implements OnInit {
           this.formArray[i].value.countryFormControl;
         this.dataTransfer.details[i].gender =
           this.formArray[i].value.genderFormControl;
-
         this.dataTransfer.details[i].language =
           this.formArray[i].value.languageFormControl;
-        console.log(
-          this.formArray[i].value.languageFormControl,
-          typeof this.formArray[i].value.languageFormControl
-        );
         break;
       }
     }
@@ -383,20 +225,12 @@ export class DatabaseComponent implements OnInit {
   deleteValues(id: number) {
     for (let i = 1; i < this.detailsToBeStored.length; i++) {
       if (id == i) {
-        console.log('delete', i);
-        console.log(this.dataTransfer.details.length);
-        console.log(this.formArray.length);
-        console.log(this.detailsToBeStored.length);
         this.dataTransfer.details[i].isCheck = false;
-        console.log(this.formArray[i].value.languageFormControl);
         this.formArray[i].enable();
         this.dataTransfer.details.splice(i, 1);
         this.detailsToBeStored.splice(i, 1);
         this.formArray.splice(i, 1);
         this.languages.splice(i, 1);
-        console.log(this.dataTransfer.details.length);
-        console.log(this.formArray.length);
-        console.log(this.detailsToBeStored.length);
         this.ngOnInit();
         break;
       }
@@ -415,37 +249,27 @@ export class DatabaseComponent implements OnInit {
         const checkArray: FormArray = this.formArray[i].get(
           'languageFormControl'
         ) as FormArray;
-        console.log(checkArray);
         if (e.target.checked) {
           checkArray.push(new FormControl(e.target.value));
-          console.log(checkArray.value);
           this.checkIndex(
             checkArray.value,
             new FormControl(e.target.value).value,
             subNum,
             num
           );
-          //this.detailsToBeStored[i].language = checkArray.value;
-          //this.formArray[i].value.languageFormControl = checkArray.value;
         } else {
           let k: number = 0;
           // console.log(checkArray.value);
           checkArray.controls.forEach((item) => {
-            console.log(item.value, e.target.value);
             if (item.value == e.target.value) {
               checkArray.removeAt(k);
               this.checkIndex(checkArray.value, item.value, subNum, num);
-              console.log(checkArray.value);
-              //this.detailsToBeStored[i].language = checkArray.value;
-              // this.formArray[i].value.languageFormControl = checkArray.value;
               return;
             }
             k++;
           });
         }
-        console.log(checkArray.value);
         this.formArray[i].value.languageFormControl = checkArray.value;
-        console.log(this.formArray[i].value.languageFormControl);
       }
     }
   }

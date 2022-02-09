@@ -68,7 +68,7 @@ export class FormValidateComponent implements OnInit {
   onChange() {
     console.log(this.languages);
   }
-  formDetails: Array<object> = [];
+
   submitForm() {
     this.profileForm.reset();
   }
@@ -84,21 +84,6 @@ export class FormValidateComponent implements OnInit {
 
     if (this.profileForm.valid) {
       console.log('Profile form data :: ', this.profileForm.value);
-      this.formDetails.push({
-        userId: this.profileForm.value.userIdFormControl,
-        name: this.profileForm.value.nameFormControl,
-        email: this.profileForm.value.emailFormControl,
-        country: this.profileForm.value.countryControl,
-        gender: this.profileForm.value.gender,
-        languageString: this.selectedLanguage,
-        language: this.profileForm.value.languageFormControl,
-        // id: this.dataTransfer.lengthofArray,
-        isCheck: this.isCheck,
-      });
-      this.formDetails.forEach((e) => {
-        console.log(e);
-      }); //console.log(this.formDetails[0]);
-      //this.dataTransfer.updateDetails({});
       this.dataTransfer.updateDetails({
         userId: this.profileForm.value.userIdFormControl,
         name: this.profileForm.value.nameFormControl,
@@ -107,7 +92,7 @@ export class FormValidateComponent implements OnInit {
         gender: this.profileForm.value.gender,
         languageString: this.selectedLanguage,
         language: this.profileForm.value.languageFormControl,
-        // id: this.dataTransfer.lengthofArray,
+        id: this.dataTransfer.lengthofArray,
         isCheck: this.isCheck,
       });
       this.dataTransfer.languageArray = this.selectedLanguageArray;

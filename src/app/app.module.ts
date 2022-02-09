@@ -12,9 +12,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { DatabaseComponent } from './database/database.component';
 import { AppRoutingModule } from './app-routing.module';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
-  declarations: [AppComponent, FormValidateComponent, DatabaseComponent],
+  declarations: [
+    AppComponent,
+    FormValidateComponent,
+    DatabaseComponent,
+    DialogComponent,
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -27,6 +34,7 @@ import { AppRoutingModule } from './app-routing.module';
     MatCardModule,
     MatButtonModule,
     AppRoutingModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
